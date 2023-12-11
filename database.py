@@ -10,15 +10,15 @@ class Database:
         self.connection_string = os.environ.get("CONN_STRING")
         self.db = pymongo.MongoClient(self.connection_string)["sburrapp"]
 
-    def get_account(self, device_id: str) -> Mapping[str, Any] | None:
+    def get_account(self, device_id: str):
         print("[DB] Getting account")
         return self.db["accounts"].find_one({"userId": device_id})
 
-    def get_account_by_username(self, username: str) -> Mapping[str, Any] | None:
+    def get_account_by_username(self, username: str):
         print("[DB] Getting account")
         return self.db["accounts"].find_one({"username": username})
 
-    def get_account_by_friend_code(self, friend_code: str) -> Mapping[str, Any] | None:
+    def get_account_by_friend_code(self, friend_code: str):
         print("[DB] Getting account")
         for acc in self.db["accounts"].find({}):
             friend_code_calc = sha256(acc["userId"].encode('utf-8')).hexdigest()[0:15]
@@ -69,7 +69,7 @@ class Database:
         self.db["friends"].find_one_and_update({"userId": friend_id["userId"]},
                                                {"$pull": {"friends": {"username": your_username}}})
 
-    def get_fcm(self, device_id: str) -> Mapping[str, Any] | None:
+    def get_fcm(self, device_id: str):
         print("[DB] Getting fcm")
         return self.db["fcm"].find_one({"userId": device_id})
 
